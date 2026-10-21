@@ -1,4 +1,3 @@
-
 name: Build Android APK
 
 on:
@@ -19,14 +18,20 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle
+      - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Build APK with Gradle
-        run: gradle assembleDebug
+      - name: Auto-Find Project & Build
+        run: |
+          # اینڈرائیڈ فائل کو خود ڈھونڈیں
+          GRADLE_FILE=$(find . -name "build.gradle.kts" -o -name "build.gradle" | head -n 1)
+          PROJECT_DIR=$(dirname "$GRADLE_FILE")
+          echo "Project Root Directory Found: $PROJECT_DIR"
+          cd "$PROJECT_DIR"
+          gradle assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: fleetprofit-app-debug
-          path: app/build/outputs/apk/debug/*.apk
+          path: '**/build/outputs/apk/debug/*.apk'
