@@ -1,3 +1,4 @@
+
 name: Build Android APK
 
 on:
@@ -21,11 +22,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Build APK with Gradle
-        run: gradle assembleDebug
+      - name: Build APK with Gradle inside folder
+        run: |
+          cd fleetprofit-manager
+          gradle assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: fleetprofit-app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: fleetprofit-manager/app/build/outputs/apk/debug/*.apk
